@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pi & φ Explorer</title>
+<style>
+body {
+  background-color: #121212;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  transition: background-color 0.5s ease;
+}
+
+.container {
+  text-align: center;
+  padding: 30px;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 1em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+input[type="number"] {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-bottom: 1em;
+  width: 200px;
+}
+
+button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1.1em;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+#result {
+  margin-top: 2em;
+  font-size: 1.2em;
+}
+
+#result p {
+  margin-bottom: 0.5em;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pi & φ Explorer</h1>
+    <p>Precision (digits): <input type="number" id="precision" value="100"></p>
+    <button onclick="calculate()">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const precision = parseInt(document.getElementById("precision").value);
+      const resultElement = document.getElementById("result");
+
+      // Using the Chudnovsky formula for Pi
+      let k = 0;
+      let aK = 1;
+      let aK1 = 0;
+      let bK = 0;
+      let bK1 = 1;
+      let p = 0;
+      let sum = 0;
+      while (k < precision) {
+        let t = aK * aK1;
+        aK1 = aK;
+        aK = t;
+        t = bK * bK1;
+        bK1 = bK;
+        bK = t;
+        t = (6 * k) * (2 * k - 1) * (6 * k - 1);
+        sum += (aK * bK) / t;
+        k++;
+      }
+      let pi = 1 / (12 * sum);
+
+      // Calculate φ (Golden Ratio)
+      let phi = (1 + Math.sqrt(5)) / 2;
+
+      resultElement.innerHTML = `
+        <p>Pi to ${precision} digits: ${pi.toFixed(precision)}</p>
+        <p>φ (Golden Ratio) to ${precision} digits: ${phi.toFixed(precision)}</p>
+      `;
+
+      resultElement.style.opacity = 0;
+      setTimeout(() => {
+        resultElement.style.opacity = 1;
+      }, 10);
+    }
+  </script>
+</body>
+</html>
