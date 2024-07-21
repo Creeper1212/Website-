@@ -74,6 +74,9 @@ button:hover {
   </div>
 
   <script>
+    // Auto-calculate on page load
+    window.onload = calculate;
+
     function calculate() {
       const precision = parseInt(document.getElementById("precision").value);
       const resultElement = document.getElementById("result");
